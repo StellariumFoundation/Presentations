@@ -1,15 +1,25 @@
-document.addEventListener('DOMContentLoaded', () => {
+// Wait for the entire page to load, including all resources like scripts
+window.onload = () => {
     const markdownInput = document.getElementById('markdownInput');
     const generatePdfButton = document.getElementById('generatePdfButton');
     const messageArea = document.getElementById('messageArea');
     const previewArea = document.getElementById('previewArea');
 
-    // Check if Marp is loaded
-    if (typeof Marp === 'undefined') {
-        showMessage('Error: Marp Core library not loaded. Please check the script link in index.html.', 'error');
-        console.error("Marp Core library not loaded.");
-        generatePdfButton.disabled = true;
-        return;
+    // Check if Marp is loaded after the window has loaded
+    if (typeof Marp === 'undefined' || typeof Marp.Marp === 'undefined') {
+        showMessage('Error: Marp Core library not loaded properly. The preview functionality will not work.', 'error');
+        console.error("Marp Core library not loaded or Marp.Marp is not defined by window.onload.");
+        if(generatePdfButton) {
+            generatePdfButton.disabled = true;
+            generatePdfButton.textContent = "Preview Disabled (Marp Lib Error)";
+        }
+        return; // Stop further execution if Marp is not available
+    }
+
+    // If Marp is loaded, enable the button (it might have been disabled by a previous failed check)
+    if(generatePdfButton) {
+        generatePdfButton.disabled = false;
+        generatePdfButton.textContent = "Generate PDF (Preview HTML)";
     }
 
     generatePdfButton.addEventListener('click', () => {
@@ -26,19 +36,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Initialize Marp
-            // Ensure options are simple for now, customize as needed later
             const marp = new Marp.Marp({
-                html: true, // Allow HTML (though Marp has its own sanitizer)
-                // breaks: true, // GFM line breaks, if desired
-                // themeSet: [], // If you have custom themes packaged
-                // You might need to explicitly load themes if using CDN version and they are not self-contained
+                html: true, 
             }); 
 
             // Render the markdown
             const { html, css } = marp.render(markdownText);
 
-            // Inject CSS into the document's head (or a specific style tag for the preview)
-            // For simplicity, creating a new style tag each time. Could be optimized.
+            // Inject CSS into the document's head
             let styleTag = document.getElementById('marp-style');
             if (!styleTag) {
                 styleTag = document.createElement('style');
@@ -48,15 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
             styleTag.textContent = css;
 
             // Display HTML in the preview area
-            // Marp HTML output is typically a series of <section> elements for slides.
-            // The provided HTML might need a container or specific styling to display correctly.
-            // For now, just injecting it directly.
             previewArea.innerHTML = html;
             
             showMessage('HTML Preview generated successfully.', 'success');
-
-            // Placeholder for actual PDF generation and download
-            // downloadPdf("dummy PDF content", "presentation.pdf");
 
         } catch (error) {
             console.error("Error generating HTML/CSS with Marp:", error);
@@ -66,23 +65,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function showMessage(message, type) {
-        messageArea.textContent = message;
-        messageArea.className = 'message'; // Clear existing classes
-        messageArea.classList.add(type); 
-        messageArea.style.display = 'block';
+        if (messageArea) {
+            messageArea.textContent = message;
+            messageArea.className = ''; // Clear existing classes
+            // Add 'messageArea' class for base styling if you have one, then type
+            messageArea.classList.add('messageArea', type); 
+            messageArea.style.display = 'block';
+        } else {
+            console.warn("Message area not found. Message:", message, "Type:", type);
+        }
     }
+};
 
-    // Placeholder for a function to trigger PDF download
-    // function downloadPdf(data, filename) {
-    //     const blob = new Blob([data], { type: 'application/pdf' });
-    //     const url = URL.createObjectURL(blob);
-    //     const a = document.createElement('a');
-    //     a.href = url;
-    //     a.download = filename;
-    //     document.body.appendChild(a);
-    //     a.click();
-    //     document.body.removeChild(a);
-    //     URL.revokeObjectURL(url);
-    //     showMessage('PDF download initiated (simulated).', 'success');
-    // }
-});
+// Optional: Add a fallback if window.onload has already fired (e.g. if script is loaded dynamically late)
+// However, for a script at the end of body, window.onload is generally reliable.
+// If an issue persists, one might also consider a self-invoking function that checks for Marp periodically.
+// For example:
+// (function checkMarp() {
+//   if (typeof Marp !== 'undefined' && typeof Marp.Marp !== 'undefined') {
+//     // Call the main initialization function here
+//     initializeApp(); 
+//   } else {
+//     setTimeout(checkMarp, 100); // Check again shortly
+//   }
+// })();
+// function initializeApp() { /* ... all the code currently in window.onload ... */ }
