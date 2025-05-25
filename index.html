@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown to PDF Presentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@marp-team/marp-core/dist/marp.browser.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Markdown to PDF Presentation Generator</h1>
+    </header>
+    
+    <main class="container">
+        <div class="controls-area">
+            <button id="generatePdfButton">Generate PDF (Preview HTML)</button>
+            <div id="messageArea" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="editor-preview-wrapper">
+            <section class="input-section" aria-labelledby="markdown-heading">
+                <h2 id="markdown-heading">Enter Your Marp Markdown:</h2>
+                <textarea id="markdownInput" rows="25" placeholder="---
+marp: true
+theme: gaia
+---
+
+# Slide 1
+Content for slide 1
+
+---
+
+# Slide 2
+Content for slide 2" aria-label="Marp Markdown Input"></textarea>
+            </section>
+            
+            <section class="preview-section" aria-labelledby="preview-heading">
+                <h2 id="preview-heading">Preview:</h2>
+                <div id="previewArea" style="border: 1px solid #ccc; min-height: 400px; background: #fdfdfd; overflow: auto; padding: 10px;">
+                    <!-- Rendered HTML will be injected here -->
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <script src="script.js"></script>
+</body>
+</html>

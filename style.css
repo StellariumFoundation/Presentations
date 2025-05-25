@@ -1,0 +1,177 @@
+/* Import Google Fonts (already in HTML, but good for CSS context) */
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Open+Sans:wght@400;700&display=swap'); */
+
+body {
+    font-family: 'Open Sans', 'Arial', sans-serif;
+    background-color: #f0f2f5; /* Slightly softer background */
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0; /* Remove default padding, handle with header/main */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #34495e; /* Darker header background */
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 2em; /* Larger heading */
+}
+
+.container {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 1400px; /* Increased max-width for side-by-side */
+    flex-grow: 1; /* Allow container to grow */
+    display: flex;
+    flex-direction: column;
+}
+
+.controls-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.editor-preview-wrapper {
+    display: flex;
+    flex-direction: row; /* Side-by-side layout */
+    gap: 20px; /* Space between editor and preview */
+    flex-grow: 1;
+}
+
+.input-section, .preview-section {
+    flex: 1; /* Each takes half the space */
+    display: flex;
+    flex-direction: column;
+}
+
+.input-section h2, .preview-section h2 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 5px;
+}
+
+#markdownInput {
+    width: 100%;
+    flex-grow: 1; /* Allow textarea to fill vertical space */
+    padding: 12px;
+    border: 1px solid #ced4da; /* Softer border */
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 0; /* Remove bottom margin as sections handle spacing */
+}
+
+#generatePdfButton {
+    background-color: #3498db;
+    color: white;
+    padding: 12px 30px; /* Slightly larger padding */
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em; /* Larger font size */
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 15px; /* Space between button and message area */
+}
+
+#generatePdfButton:hover {
+    background-color: #2980b9;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+#generatePdfButton:active {
+    background-color: #2573a7;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+#messageArea {
+    width: 100%; /* Take full width of controls-area */
+    max-width: 600px; /* But cap it */
+    margin-top: 0; /* Adjusted as it's in controls-area */
+    padding: 12px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    display: none; /* Initially hidden, shown by JS */
+}
+
+#messageArea.success {
+    background-color: #d4edda; /* Bootstrap success colors */
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    display: block;
+}
+
+#messageArea.error {
+    background-color: #f8d7da; /* Bootstrap error colors */
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    display: block;
+}
+
+#messageArea.info {
+    background-color: #d1ecf1; /* Bootstrap info colors */
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+    display: block;
+}
+
+#previewArea {
+    border: 1px solid #ced4da; /* Match textarea border */
+    border-radius: 5px;
+    background: #ffffff; /* Cleaner white background */
+    overflow: auto; /* Keep overflow auto */
+    padding: 15px; /* More padding inside preview */
+    flex-grow: 1; /* Allow preview to fill vertical space */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Basic responsive adjustments */
+@media (max-width: 768px) {
+    .editor-preview-wrapper {
+        flex-direction: column; /* Stack editor and preview */
+    }
+
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 1.8em;
+    }
+
+    #markdownInput {
+        min-height: 250px; /* Ensure decent height on mobile */
+    }
+
+    #previewArea {
+        min-height: 300px; /* Ensure decent height on mobile */
+    }
+}
