@@ -4,7 +4,7 @@
   "description": "Marp interactive previewer",
   "private": true,
   "scripts": {
-    "build": "esbuild script.js --bundle --outfile=dist/bundle.js --format=iife --global-name=App --loader:.js=jsx --define:process.env.NODE_ENV=\"'production'\" --external:@marp-team/marp-core",
+    "build": "esbuild script.js --bundle --outfile=dist/bundle.js --format=iife --global-name=App --external:@marp-team/marp-core --loader:.js=jsx --define:process.env.NODE_ENV=\"'production'\"",
     "build:marp- отдельно": "echo 'Marp core will be loaded via CDN or local script tag, not bundled directly with esbuild in this configuration to keep it simple for now. Ensure Marp is available globally as window.Marp if not changing script.js to import it.'"
   },
   "devDependencies": {
