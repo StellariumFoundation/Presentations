@@ -8,7 +8,7 @@
     "build:marp- отдельно": "echo 'Marp core will be loaded via CDN or local script tag, not bundled directly with esbuild in this configuration to keep it simple for now. Ensure Marp is available globally as window.Marp if not changing script.js to import it.'"
   },
   "dependencies": {
-    "@marp-team/marp-core": "^2.5.3"
+    "@marp-team/marp-core": "^3.9.0"
   },
   "devDependencies": {
     "esbuild": "^0.20.0"
