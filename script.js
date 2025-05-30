@@ -1,5 +1,3 @@
-import { Marp } from '@marp-team/marp-core';
-
 // Global variables for DOM elements to be accessible by all functions
 let markdownInput, generatePdfButton, messageArea, previewArea;
 
@@ -28,7 +26,7 @@ function initializeMarpDependentLogic() {
 
         try {
             // Initialize Marp
-            const marp = new Marp({
+            const marp = new Marp.Marp({
                 html: true,
             });
 
@@ -76,6 +74,30 @@ function showMessage(message, type) {
     }
 }
 
+function waitForMarp(maxAttempts = 20, interval = 200) { // Try for 4 seconds
+    let attempts = 0;
+
+    function check() {
+        if (typeof window.Marp !== 'undefined' && typeof window.Marp.Marp !== 'undefined') {
+            console.log("Marp library loaded successfully after " + attempts + " attempts.");
+            initializeMarpDependentLogic();
+        } else {
+            attempts++;
+            if (attempts < maxAttempts) {
+                setTimeout(check, interval);
+            } else {
+                console.error("Marp library failed to load after " + maxAttempts + " attempts.");
+                showMessage('Error: Marp Core library could not be loaded. Preview functionality will be disabled.', 'error');
+                if (generatePdfButton) {
+                    generatePdfButton.disabled = true;
+                    generatePdfButton.textContent = "Preview Disabled (Marp Lib Error)";
+                }
+            }
+        }
+    }
+    check();
+}
+
 // Wait for the basic DOM structure to be ready before trying to find elements
 document.addEventListener('DOMContentLoaded', () => {
     // Assign DOM elements to global variables
@@ -94,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("Critical Error: UI component 'messageArea' not found.");
     }
 
-    // Initialize Marp functionality directly since it's now imported
-    initializeMarpDependentLogic();
+
+    // Start polling for Marp
+    waitForMarp();
 });
